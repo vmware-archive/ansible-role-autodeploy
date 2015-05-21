@@ -1,0 +1,6 @@
+---
+- include: vcsa.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- include: windows.yml
+  when: ansible_distribution != 'Debian' or ansible_distribution != 'Ubuntu'

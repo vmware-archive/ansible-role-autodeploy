@@ -1,0 +1,17 @@
+---
+- name: download esxi software depot
+  win_get_url: 
+    url: "{{ esxi_depot_url }}"
+    dest: 'C:\{{ esxi_depot_zip }}'
+
+- name: create powershell script from template
+  local_action: template dest="tmp/softwaredepot.ps1" src="windows/softwaredepot.ps1"
+
+- name: run powershell softwaredepot script
+  script: tmp/softwaredepot.ps1
+
+- name: create powershell script from template
+  local_action: template dest="tmp/autodeploy.ps1" src="windows/autodeploy.ps1"
+
+- name: run powershell autodeploy script
+  script: "tmp/autodeploy.ps1"

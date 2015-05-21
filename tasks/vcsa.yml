@@ -1,0 +1,10 @@
+---
+- name: enable autodeploy service
+  service: name=vmware-rbd-watchdog enabled=yes state=restarted
+
+- name: zip deploy-tftp files
+  shell: 'cd /usr/share/ipxe && tar -cjf /tmp/deploy-tftpd.tbz2 *efi* undion* /tftpboot/tramp'
+
+# todo investigate checksum issue
+- name: Fetch deploy
+  fetch: src=/tmp/deploy-tftpd.tbz2 dest=tmp/deploy-tftpd.tbz2 flat=yes validate_checksum=no
