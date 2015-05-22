@@ -2,6 +2,6 @@
 - name: enable the autodeploy service on the vcenter server, and grab the esxi boot image
   include: vcsa.yml
 - name: install powercli for linux
-  include: powercli.yml 
+  include: powercli.yml
 - name: configure autodeploy using powercli
   include: autodeploy.yml

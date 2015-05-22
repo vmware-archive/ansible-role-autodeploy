@@ -1,6 +1,6 @@
 ---
 - name: download esxi software depot
-  win_get_url: 
+  win_get_url:
     url: "{{ esxi_depot_url }}"
     dest: 'C:\{{ esxi_depot_zip }}'
 
