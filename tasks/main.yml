@@ -1,6 +1,7 @@
 ---
-- include: vcsa.yml
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-
-- include: windows.yml
-  when: ansible_distribution != 'Debian' or ansible_distribution != 'Ubuntu'
+- name: enable the autodeploy service on the vcenter server, and grab the esxi boot image
+  include: vcsa.yml
+- name: install powercli for linux
+  include: powercli.yml 
+- name: configure autodeploy using powercli
+  include: autodeploy.yml
