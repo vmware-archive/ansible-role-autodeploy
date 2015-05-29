@@ -8,18 +8,18 @@ $CustomInitScript = Join-Path $currentDir $CustomInitScriptName
 
 #returns the version of Powershell
 # Note: When using, make sure to surround Get-PSVersion with parentheses to force value comparison
-function Get-PSVersion { 
+function Get-PSVersion {
     if (test-path variable:psversiontable) {
 		$psversiontable.psversion
 	} else {
 		[version]"1.0.0.0"
-	} 
+	}
 }
 
 # Returns the path (with trailing backslash) to the directory where PowerCLI is installed.
 function Get-InstallPath {
    $regKeys = Get-ItemProperty "hklm:\software\VMware, Inc.\VMware vSphere PowerCLI" -ErrorAction SilentlyContinue
-   
+
    #64bit os fix
    if($regKeys -eq $null){
       $regKeys = Get-ItemProperty "hklm:\software\wow6432node\VMware, Inc.\VMware vSphere PowerCLI"  -ErrorAction SilentlyContinue
@@ -35,7 +35,7 @@ function LoadSnapins(){
    $loaded = Get-PSSnapin -Name $snapinList -ErrorAction SilentlyContinue | % {$_.Name}
    $registered = Get-PSSnapin -Name $snapinList -Registered -ErrorAction SilentlyContinue  | % {$_.Name}
    $notLoaded = $registered | ? {$loaded -notcontains $_}
-   
+
    foreach ($snapin in $registered) {
       if ($loaded -notcontains $snapin) {
          Add-PSSnapin $snapin
@@ -101,26 +101,26 @@ if((Get-PSVersion) -ge "2.0"){
 
     function global:TabExpansion {
        param($line, $lastWord)
-       
+
        $originalResult = & $global:originalTabExpansionFunction $line $lastWord
-       
+
        if ($originalResult) {
           return $originalResult
        }
        #ignore parsing errors. if there are errors in the syntax, try anyway
        $tokens = [System.Management.Automation.PSParser]::Tokenize($line, [ref] $null)
-       
+
        if ($tokens)
        {
            $lastToken = $tokens[$tokens.count - 1]
-           
+
            $startsWith = ""
-           
+
            # locate the last parameter token, which value is to be expanded
            switch($lastToken.Type){
                'CommandParameter' {
                     #... -Parameter<space>
-                    
+
                     $paramToken = $lastToken
                }
                'CommandArgument' {
@@ -128,9 +128,9 @@ if((Get-PSVersion) -ge "2.0"){
                     if($lastWord){
                         #... -Parameter Argument  <<< partially spelled argument, $lastWord == Argument
                         #... -Parameter Argument Argument
-                        
+
                         $startsWith = $lastWord
-                        
+
                         $prevToken = $tokens[$tokens.count - 2]
                         #if the argument is not preceeded by a paramter, then it is a value for a positional parameter.
                         if ($prevToken.Type -eq 'CommandParameter') {
@@ -140,9 +140,9 @@ if((Get-PSVersion) -ge "2.0"){
                     #else handles "... -Parameter Argument<space>" and "... -Parameter Argument Argument<space>" >>> which means the argument is entirely spelled
                }
            }
-           
+
            # if a parameter is found for the argument that is tab-expanded
-           if ($paramToken) {        
+           if ($paramToken) {
                #locates the 'command' token, that this parameter belongs to
                [int]$groupLevel = 0
                for($i=$tokens.Count-1; $i -ge 0; $i--) {
@@ -151,7 +151,7 @@ if((Get-PSVersion) -ge "2.0"){
                       $cmdletToken = $currentToken
                       break;
                    }
-                   
+
                    if ($currentToken.Type -eq 'GroupEnd') {
                       $groupLevel += 1
                    }
@@ -159,28 +159,28 @@ if((Get-PSVersion) -ge "2.0"){
                       $groupLevel -= 1
                    }
                }
-               
+
                if ($cmdletToken) {
                    # getting command object
                    $cmdlet = Get-Command $cmdletToken.Content
                    # gettint parameter information
                    $parameter = $cmdlet.Parameters[$paramToken.Content.Replace('-','')]
-                   
+
                    # getting the data type of the parameter
                    $parameterType = $parameter.ParameterType
-                   
+
                    if ($parameterType.IsEnum) {
                       # if the type is Enum then the values are the enum values
                       $values = [System.Enum]::GetValues($parameterType)
                    } elseif($parameterType.IsArray) {
                       $elementType = $parameterType.GetElementType()
-                      
-                      if($elementType.IsEnum) { 
+
+                      if($elementType.IsEnum) {
                         # if the type is an array of Enum then values are the enum values
-                        $values = [System.Enum]::GetValues($elementType) 
+                        $values = [System.Enum]::GetValues($elementType)
                       }
                    }
-                   
+
                    if($values) {
                       if ($startsWith) {
                           return ($values | where { $_ -like "${startsWith}*" })
@@ -190,7 +190,7 @@ if((Get-PSVersion) -ge "2.0"){
                    }
                }
            }
-       } 
+       }
     }
 }
 
