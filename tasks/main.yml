@@ -3,14 +3,7 @@
   include: vcsa.yml
   when: autodeploy_vcsa
 
-- name: install powercli for linux
-  include: powercli.yml
-  when: autodeploy_vcsa
+#- name: setup autodeploy rules
+#  include: powercli.yml
+#  when: autodeploy_vcsa
 
-- name: configure autodeploy using powercli
-  include: autodeploy.yml
-  when: autodeploy_vcsa
-
-- name: configure autodeploy rules
-  include: rules.yml
-  when: autodeploy_rules

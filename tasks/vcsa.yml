@@ -2,6 +2,9 @@
 - name: enable autodeploy service
   service: name=vmware-rbd-watchdog enabled=yes state=restarted
 
+- name: generating zip
+  wait_for: timeout=3
+
 - name: zip deploy-tftp files
   shell: 'cd /usr/share/ipxe && tar -cjf /tmp/deploy-tftpd.tbz2 *efi* undion* /tftpboot/tramp'
 

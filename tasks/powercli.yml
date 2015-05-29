@@ -1,24 +1,10 @@
 ---
-- name: install perl and other dependencies for powercli installer
-  yum: name={{ item }} state=present
-  with_items:
-  - perl
-  - openssl-devel
-  - perl-Crypt-SSLeay
-  - perl-CPAN
-  - libuuid-devel
-  - libxml2-devel
-- name: install developer tools for CPAN
-  command: "yum groupinstall -y 'Development Tools'"
-- name: install Fatal.pm via CPAN
-  command: "cpan -i Fatal"
-- name: unarchive powercli installer
-  unarchive: src="{{ net_powercli_url }}" dest=/tmp copy=yes
-- name: patch installer to accept EULA
-  lineinfile: dest=/tmp/vmware-vsphere-cli-distrib/vmware-install.pl line='  show_EULA();' state=absent
-- name: patch installer to use CPAN
-  lineinfile: dest=/tmp/vmware-vsphere-cli-distrib/vmware-install.pl line='         $install_rhel55_local = 1;' state=absent
-- name: patch installer to install CPAN versions of Perl modules
-  replace: dest=/tmp/vmware-vsphere-cli-distrib/vmware-install.pl regexp="^(.*)if\ \(get_answer\('Do\ you\ want\ to\ continue(.*)$" replace=" if (undef){"
-- name: run powercli installer
-  command: "perl /tmp/vmware-vsphere-cli-distrib/vmware-install.pl -d"
+- name: create powershell script
+  local_action: template dest="{{ auto_deploy_ps }}" src="{{ auto_deploy_src }}"
+
+- name: run powershell script to create autodeploy rules
+  script: "{{ auto_deploy_ps }}"
+  register: s_test
+
+- name: debug script
+  debug: var=s_test
