@@ -212,16 +212,16 @@ if($existsCustomInitScript) {
    & $CustomInitScript
 }
 
-Connect-VIServer -Server {{ vcenter_ip }} -Protocol https -User {{ vcenter_user }} -Password {{ vcenter_password }}
-Add-EsxSoftwareDepot -DepotUrl C:\ps_scripts\{{ esxi_depot_zip }}
+Connect-VIServer -Server {{ vcenter_host }} -Protocol https -User {{ vcenter_user }} -Password {{ vcenter_password }}
+Add-EsxSoftwareDepot -DepotUrl C:\ps\{{ esxi_depot_zip }}
 
 $HostProfile = Get-VMHostProfile {{ esxi_host_profile }}
-$ImageProfile = Get-EsxImageProfile -Name "{{ esxi_depot }}-standard"
+$ImageProfile = Get-EsxImageProfile -Name "{{ esxi_img }}"
 
 {% for cluster in datacenter['clusters'] %}
   {% for host in cluster['hosts'] %}
 $Cluster = Get-Cluster {{ cluster['name'] }}
-New-DeployRule -Name DemoDeploy_{{ loop.index }} -Item $HostProfile,$ImageProfile,$Cluster -Pattern {{ host['ip'] }}
-Set-DeployRuleSet -DeployRule Deploy{{ cluster['name'] }}_{{ loop.index }}
+New-DeployRule -Name "DemoRule_{{ cluster['name'] }}_{{ loop.index }}" -Item $HostProfile,$ImageProfile,$Cluster -Pattern {{ host['ip'] }}
+Set-DeployRuleSet -DeployRule "DemoRule{{ cluster['name'] }}_{{ loop.index }}"
   {% endfor %}
 {% endfor %}
