@@ -1,2 +1,22 @@
 autodeploy_vcsa: false
 autodeploy_rules: false
+auto_deploy_ps: '/tmp/auto_rule.ps1'
+esxi_depot_zip: 'VMware-ESXi-6.0.0-2494585-depot.zip'
+datacenter:
+  name: "{{ datacenter_name }}"
+  clusters:
+  - name: "{{ vio_cluster_mgmt }}"
+    hosts:
+    - name: "{{ mgmt_esx_name }}"
+      ip: "{{ mgmt_esx_ip }}"
+      mac: "{{ mgmt_esx_mac }}"
+  - name: "{{ vio_cluster_edge }}"
+    hosts:
+    - name: "{{ edge_esx_name }}"
+      ip: "{{ edge_esx_ip }}"
+      mac: "{{ edge_esx_mac }}"
+  - name: "{{ vio_cluster_compute }}"
+    hosts:
+    - name: "{{ compute_esx_name }}"
+      ip: "{{ compute_esx_ip }}"
+      mac: "{{ compute_esx_mac }}"

@@ -213,7 +213,7 @@ if($existsCustomInitScript) {
 }
 
 Connect-VIServer -Server {{ vcenter_host }} -Protocol https -User {{ vcenter_user }} -Password {{ vcenter_password }}
-Add-EsxSoftwareDepot -DepotUrl C:\ps\{{ esxi_depot_zip }}
+Add-EsxSoftwareDepot -DepotUrl {{win_path }}{{ esxi_depot_zip }}
 
 $HostProfile = Get-VMHostProfile {{ esxi_host_profile }}
 $ImageProfile = Get-EsxImageProfile -Name "{{ esxi_img }}"

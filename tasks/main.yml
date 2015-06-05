@@ -5,5 +5,4 @@
 
 - name: setup autodeploy rules
   include: powercli.yml
-  when: autodeploy_vcsa
-
+  when: autodeploy_rules

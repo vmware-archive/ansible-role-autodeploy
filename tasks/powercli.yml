@@ -1,6 +1,18 @@
 ---
+- name: confirm windows temp path present
+  win_stat: "path={{ win_path }}"
+  register: w_path
+  
+- name: confirm windows path
+  debug: var=w_path
+  
+- name: upload ESX Software Depot zip to win host
+  win_get_url:
+    url: "{{ win_url }}"
+    dest: "{{ win_path }}VMware-ESXi-6.0.0-2494585-depot.zip"
+    
 - name: create powershell script
-  local_action: template dest="{{ auto_deploy_ps }}" src="{{ auto_deploy_src }}"
+  local_action: template dest="{{ auto_deploy_ps }}" src=../templates/windows/auto_rule.ps1
 
 - name: run powershell script to create autodeploy rules
   script: "{{ auto_deploy_ps }}"
@@ -8,3 +20,6 @@
 
 - name: debug script
   debug: var=s_test
+
+#- name: clean up temp files dirs
+#  file: path="{{ auto_deploy_ps }}" stated=absent
