@@ -221,7 +221,11 @@ $ImageProfile = Get-EsxImageProfile -Name "{{ esxi_img }}"
 {% for cluster in datacenter['clusters'] %}
   {% for host in cluster['hosts'] %}
 $Cluster = Get-Cluster {{ cluster['name'] }}
-New-DeployRule -Name "DemoRule_{{ cluster['name'] }}_{{ loop.index }}" -Item $HostProfile,$ImageProfile,$Cluster -Pattern {{ host['ip'] }}
-Set-DeployRuleSet -DeployRule "DemoRule{{ cluster['name'] }}_{{ loop.index }}"
+$EsxHostname = "hostname={{ host['name'] }}"
+$IpAdrr = "ipv4={{ host['ip'] }}"
+New-DeployRule -Name "DemoRule_{{ cluster['name'] }}_{{ loop.index }}" -Item $HostProfile,$ImageProfile,$Cluster -Pattern $EsxHostname,$IpAdrr
   {% endfor %}
 {% endfor %}
+
+$Rules = Get-DeployRule
+Set-DeployRuleSet -DeployRule $Rules
