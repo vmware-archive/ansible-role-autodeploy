@@ -213,10 +213,24 @@ if($existsCustomInitScript) {
 }
 
 Connect-VIServer -Server {{ vcenter_host }} -Protocol https -User {{ vcenter_user }} -Password {{ vcenter_password }}
+{% if use_local == "1" and use_remote == "0" %}
 Add-EsxSoftwareDepot -DepotUrl {{win_path }}{{ esxi_depot_zip }}
+{% elif use_remote == "1" and use_local == "0" %}
+Add-EsxSoftwareDepot -DepotUrl {{ remote_url }}
+{% else %}
+Add-EsxSoftwareDepot -DepotUrl {{win_path }}{{ esxi_depot_zip }}
+{% endif %}
 
+{% if use_local == "1" and use_remote == "0" %}
 $HostProfile = Get-VMHostProfile {{ esxi_host_profile }}
 $ImageProfile = Get-EsxImageProfile -Name "{{ esxi_img }}"
+{% elif use_remote == "1" and use_local == "0" %}
+$HostProfile = Get-VMHostProfile {{ esxi_host_profile_remote }}
+$ImageProfile = Get-EsxImageProfile -Name "{{ esxi_img_remote }}"
+{% else %}
+$HostProfile = Get-VMHostProfile {{ esxi_host_profile }}
+$ImageProfile = Get-EsxImageProfile -Name "{{ esxi_img }}"
+{% endif %}
 
 {% for cluster in datacenter['clusters'] %}
   {% for host in cluster['hosts'] %}

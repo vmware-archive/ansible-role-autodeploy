@@ -1,25 +1,34 @@
 ---
+- name: Check if remote or local depot selected
+  fail: msg="Remote and local depot selected, Please select one or the other"
+  when: use_local == "1" and use_remote == "1"
+
 - name: confirm windows temp path present
   win_stat: "path={{ win_path }}"
+  when: use_local == "1"
   register: w_path
-  
+
 - name: confirm windows path
   debug: var=w_path
-  
+
 - name: upload ESX Software Depot zip to win host
   win_get_url:
     url: "{{ win_url }}"
-    dest: "{{ win_path }}VMware-ESXi-6.0.0-2494585-depot.zip"
-    
-- name: create powershell script
+    dest: "{{ win_dest }}"
+  when: use_local == "1"
+
+- name: Create powershell script for autodeploy rules
   local_action: template dest="{{ auto_deploy_ps }}" src=../templates/windows/auto_rule.ps1
 
-- name: run powershell script to create autodeploy rules
+- name: Run autodeploy rules script to create autodeploy rules
   script: "{{ auto_deploy_ps }}"
   register: s_test
 
-- name: debug script
-  debug: var=s_test
+- name: Check for Errors
+  debug: var=s_test.stderr
 
-#- name: clean up temp files dirs
-#  file: path="{{ auto_deploy_ps }}" stated=absent
+- name: Check Script Output
+  debug: var=s_test.stdout_lines
+
+- name: clean up temp files dirs
+  file: path="{{ auto_deploy_ps }}" stated=absent
