@@ -11,11 +11,16 @@
 - name: confirm windows path
   debug: var=w_path
 
+- name: make download dir
+  win_file: path={{ win_path }} state=directory
+  tags: mkdir
+
 - name: upload ESX Software Depot zip to win host
   win_get_url:
     url: "{{ win_url }}"
     dest: "{{ win_dest }}"
   when: use_local == "1"
+  tags: download
 
 - name: Create powershell script for autodeploy rules
   local_action: template dest="{{ auto_deploy_ps }}" src=../templates/windows/auto_rule.ps1
@@ -30,5 +35,6 @@
 - name: Check Script Output
   debug: var=s_test.stdout_lines
 
-- name: clean up temp files dirs
-  file: path="{{ auto_deploy_ps }}" stated=absent
+- name: clean up local copy of autodeploy script
+  local_action: file path="{{ auto_deploy_ps }}" state=absent
+  tags: mkdir

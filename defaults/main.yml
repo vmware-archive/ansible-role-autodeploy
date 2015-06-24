@@ -1,13 +1,11 @@
 autodeploy_vcsa: false
 autodeploy_rules: false
-ansible_ssh_user: "{{ win_admin }}"
-ansible_ssh_pass: "{{ win_pass }}"
-ansible_ssh_port: 5986
-ansible_connection: winrm
 auto_deploy_ps: '/tmp/auto_rule.ps1'
 esxi_depot_zip: 'VMware-ESXi-6.0.0-2494585-depot.zip'
 win_dest: "{{ win_path }}{{ esxi_depot_zip}}"
-win_url: "http://supervio.corp.local/downloads/{{ esxi_depot_zip }}"
+win_url: "http://supervio-ui.corp.local/downloads/{{ esxi_depot_zip }}"
+# could switch to something like this if not using a local download server
+#win_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2494585/publish/{{ esxi_depot_zip }}"
 datacenter:
   name: "{{ datacenter_name }}"
   clusters:
