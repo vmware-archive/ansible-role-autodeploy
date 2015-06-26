@@ -7,7 +7,8 @@ esxi_depot_zip: 'VMware-ESXi-6.0.0-2494585-depot.zip'
 win_dest: "{{ win_path }}{{ esxi_depot_zip}}"
 win_url: "http://supervio-ui.corp.local:81/downloads/{{ esxi_depot_zip }}"
 # could switch to something like this if not using a local download server
-#win_url: "http://build-squid.eng.vmware.com/build/mts/release/bora-2494585/publish/{{ esxi_depot_zip }}"
+# [XXX] hardcoded here until in answerfile
+vcenter_ssh_port: 22
 {% endraw %}
 datacenter:
   name: "{{ datacenter_name }}"

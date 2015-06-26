@@ -1,0 +1,10 @@
+---
+- name: enable bash on vcenter
+  ignore_errors: yes
+  local_action:
+    module: set_vcsa_sh
+    hostname: "{{ vcenter_host }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_password }}"
+    port: "{{ vcenter_ssh_port|default(22) }}"
+    shell: "/bin/bash"

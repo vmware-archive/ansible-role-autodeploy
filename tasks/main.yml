@@ -1,8 +1,13 @@
 ---
+# [XXX] actually need seperate role rather than toggling with `prepare_vcsa`
+- name: enable remote bash on vcenter server
+  include: prepare_vcsa.yml
+  when: prepare_vcsa is defined
+
 - name: enable the autodeploy service on the vcenter server, and grab the esxi boot image
   include: vcsa.yml
-  when: autodeploy_vcsa
+  when: autodeploy_vcsa and prepare_vcsa is not defined
 
 - name: setup autodeploy rules
   include: powercli.yml
-  when: autodeploy_rules
+  when: autodeploy_rules and prepare_vcsa is not defined
