@@ -16,7 +16,7 @@
   wait_for: timeout=3
 
 - name: zip deploy-tftp files
-  shell: 'cd /usr/share/ipxe && tar -cjf /tmp/deploy-tftpd.tbz2 *efi* undion* /tftpboot/tramp'
+  shell: 'cd /usr/share/ipxe && tar -cjf /tmp/deploy-tftpd.tbz2 *efi* undion*
 
 # todo investigate checksum issue
 - name: Fetch deploy
