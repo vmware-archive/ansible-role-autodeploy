@@ -26,7 +26,7 @@ Documentation here is under way . . . in flux as the vars get integrated into Su
     - autodeploy_vcsa: true
     - autodeploy_rules: false
   vars_files:
-    - /var/lib/supervio/answerfile.yml
+    - /var/lib/chaperone/answerfile.yml
 
 - name: prepare autodeploy rules
   hosts: ruleshost
@@ -40,7 +40,7 @@ Documentation here is under way . . . in flux as the vars get integrated into Su
     - ansible_ssh_port: 5986
     - ansible_connection: winrm
   vars_files:
-    - /var/lib/supervio/answerfile.yml
+    - /var/lib/chaperone/answerfile.yml
 ```
 
 # License and Copyright
