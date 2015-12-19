@@ -1,7 +1,7 @@
 # ansible-role-autodeploy
 
 [Ansible](https://github.com/ansible/ansible) module for installing,
-configuraing and manipulating VMware AutoDeploy.
+configuring and manipulating VMware AutoDeploy.
 
 ## Requirements
 
@@ -11,11 +11,11 @@ The role also requires a valid install of PowerCLI.
 
 ## Role Variables
 
-Documentation here is under way . . . in flux as the vars get integrated into SuperVIO UI.
+*TODO*: Documentation here is under way . . .
 
 ## Example playbook
 
-```
+```yaml
 ---
 - name: prepare vcenter for autodeploy
   hosts: vcsa
